@@ -341,3 +341,68 @@ KEY OBSERVATIONS
 BLOCKERS
 None
 
+SESSION 005 — June 12, 2026 (Afternoon)
+Time spent: ~1.5 hours
+Phase: Feature Engineering + SQL Connection
+       (Week 1 → Week 2 transition)
+
+OBJECTIVE
+Convert Session 004 findings into binary
+feature flags. Establish MS SQL Server
+connection and push enriched dataset.
+
+WHAT WAS DONE
+
+1. Feature Engineering (03_feature_engineering.ipynb)
+   - Notebook structure cleanup: moved
+     bivariate analysis cells from
+     01_data_inspection.ipynb to
+     02_eda_analysis.ipynb
+   - Created 3 binary flags using
+     np.where() / boolean + astype(int):
+     
+     low_temp_diff_flag (temp_diff < 8.6)
+       flag=0: 9280 rows, 2.3% failure rate
+       flag=1:  720 rows, 17.5% failure rate
+       → 7.6x lift over baseline (3.39%)
+     
+     high_torque_flag (>75th percentile)
+       flag=0: 7529 rows, 1.26% failure rate
+       flag=1: 2471 rows, 9.87% failure rate
+       → 7.8x lift
+     
+     high_tool_wear_flag (>75th percentile)
+       flag=0: 7504 rows, 2.21% failure rate
+       flag=1: 2496 rows, 6.93% failure rate
+       → 3.1x lift
+
+   - All 3 flags verified as strong
+     predictors before modeling — ranked
+     by lift: high_torque_flag ≈
+     low_temp_diff_flag > high_tool_wear_flag
+
+2. MS SQL Server Connection
+   - SSMS connected (Windows Authentication)
+   - Database created: PulseOps
+   - Python connected via SQLAlchemy +
+     pyodbc (mssql+pyodbc connection string)
+   - Enriched dataset (10,000 rows, original
+     14 columns + temp_diff + 3 engineered
+     flags = 17 columns) pushed to table:
+     equipment_sensor_data
+   - Verified row count and sample data
+     both in Python (pd.read_sql) and
+     directly in SSMS
+
+KEY DECISIONS
+- src/ folder confirmed for later use
+  (Week 3-4 reusable functions) —
+  not used yet, notebooks-only for now
+- equipment_sensor_data table now serves
+  as the single source of truth for
+  upcoming SQL analysis layer
+
+BLOCKERS
+None — connection successful on first
+attempt after SSMS setup
+
