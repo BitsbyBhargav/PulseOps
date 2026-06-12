@@ -282,3 +282,62 @@ NEXT SESSION (004)
 - Begin EDA visualizations
 
 ─────────────────────────────────────
+
+
+SESSION 004 — June 12, 2026
+Time spent: ~1 hour
+Phase: Bivariate Analysis (Week 1)
+
+OBJECTIVE
+Analyze relationship between sensor readings,
+product type, and machine failure. Engineer
+temperature differential feature and
+investigate HDF pattern.
+
+WHAT WAS DONE
+
+1. Sensor Readings vs Machine Failure
+   Mean values compared (fail vs no-fail):
+   - Air temp [K]:     299.97 → 300.89
+   - Process temp [K]: 310.00 → 310.29
+   - Rotational speed: 1540.26 → 1496.49 (↓)
+   - Torque [Nm]:      39.63 → 50.17 (↑↑)
+   - Tool wear [min]:  106.69 → 143.78 (↑↑)
+   - Torque and Tool wear show strongest
+     individual signals; temp readings
+     alone show minimal difference
+
+2. Failure Rate by Product Type
+   - H: 1003 units, 21 failures, 2.09%
+   - L: 6000 units, 235 failures, 3.92%
+   - M: 2997 units, 83 failures, 2.77%
+   - Type L (60% of dataset) accounts for
+     69% of all failures — risk
+     concentration in largest segment
+
+3. Temperature Differential Engineering
+   - New feature: temp_diff = Process temp
+     - Air temp
+   - Range: 7.6 to 12.1, mean 10.0, std 1.0
+   - KEY FINDING: HDF=1 cases cluster in a
+     narrow band (8.0-8.6), while HDF=0
+     spans the full range (7.6-12.1)
+   - Discovered approximate physical
+     threshold: temp_diff < 8.6 = HDF
+     danger zone
+   - Overall Machine failure comparison
+     showed weaker pattern (other 4 failure
+     types add noise to this signal)
+
+KEY OBSERVATIONS
+- Torque, Tool wear, and temp_diff
+  threshold (<8.6) are the three strongest
+  candidate features identified so far
+- temp_diff represents a discovered
+  physical mechanism, not just statistical
+  correlation — high value for model
+  interpretability later
+
+BLOCKERS
+None
+
