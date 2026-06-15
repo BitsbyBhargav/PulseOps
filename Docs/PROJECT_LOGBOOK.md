@@ -340,7 +340,7 @@ KEY OBSERVATIONS
 
 BLOCKERS
 None
-
+-------------------------------------------------------------------------------------------
 SESSION 005 — June 12, 2026 (Afternoon)
 Time spent: ~1.5 hours
 Phase: Feature Engineering + SQL Connection
@@ -405,4 +405,86 @@ KEY DECISIONS
 BLOCKERS
 None — connection successful on first
 attempt after SSMS setup
+-------------------------------------------------------------------------------------------
+SESSION 006 — June 16, 2026 (Morning)
+Time spent: ~1 hour
+Phase: SQL Practice — Self-Driven
+       (Week 2, Day 1)
+
+OBJECTIVE
+Build SQL confidence on equipment_sensor_data
+through independent practice — 15 queries
+spanning basic SELECT/WHERE to intermediate
+subqueries, CASE statements, and conditional
+aggregation — before moving to advanced
+business/analysis queries.
+
+WHAT WAS DONE
+
+15 practice queries written independently
+(file: sql/02_practice_queries.sql):
+
+Q1-5 (Basic): SELECT, WHERE, ORDER BY, COUNT
+  - All 5 correct on first attempt
+
+Q6-10 (Intermediate): GROUP BY, aggregates,
+HAVING, conditional counting
+  - Q6: avg torque by Type — correct
+  - Q7: min/max tool wear for failed units —
+    GROUP BY UDI applied incorrectly (UDI
+    is unique, grouping by it collapses
+    nothing) — corrected to remove GROUP BY
+  - Q8: risk flag count via inline sum of
+    5 failure-type columns + GROUP BY —
+    correct, strong technique
+  - Q9: conditional counting via
+    COUNT(CASE WHEN...) — correct, advanced
+    for this stage
+  - Q10: HAVING on aggregated avg — correct
+
+Q11-15 (Intermediate+): subqueries, CASE,
+multi-condition aggregation
+  - Q11: subquery in WHERE (above-average
+    air temp) — logic correct; redundant
+    GROUP BY removed (same root cause as Q7)
+  - Q12: CASE-based wear categorization —
+    correct; full aggregation (derived
+    table) identified as next-level
+    extension, not required at this stage
+  - Q13: TOP 5 by torque among failures —
+    correct
+  - Q14: avg temp_diff by HDF — correct,
+    validates Session 004 boxplot finding
+    (HDF=1 group shows lower temp_diff)
+  - Q15: combined high_torque_flag=1 AND
+    low_temp_diff_flag=1 — failure rate
+    calculation using conditional SUM +
+    correct float casting — correct,
+    strongest query of the set
+
+RESULT
+11/15 correct on first attempt. Two logic
+errors identified (Q3 wrong column filter,
+Q7 unnecessary GROUP BY) — both corrected.
+One redundant clause (Q11). One incomplete
+relative to original ask (Q12) — extension
+noted for later practice.
+
+KEY CONCEPT REINFORCED
+GROUP BY on a unique column (e.g., primary
+key UDI) produces no meaningful aggregation
+— each group contains exactly one row. This
+is a common SQL interview trap question and
+was encountered hands-on in Q7 and Q11.
+
+KNOWN ISSUE — NOTED
+Bracket escaping behavior in current SQL
+editor appears to require double closing
+brackets ]] in some cases vs standard
+single ] — likely an editor auto-pairing
+quirk. To be verified against raw .sql
+file content before GitHub push.
+
+BLOCKERS
+None — all queries executed successfully
 
